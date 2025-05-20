@@ -48,25 +48,25 @@
         // Al presionar un botón de dirección
         private void OnAdelantePressed(object sender, EventArgs e)
         {
-            AnimateButton(sender as Button);
+            AnimatePressButton(sender as Button);
             IniciarEnvio("forward");
         }
 
         private void OnAtrasPressed(object sender, EventArgs e)
         {
-            AnimateButton(sender as Button);
+            AnimatePressButton(sender as Button);
             IniciarEnvio("backward");
         }
 
         private void OnIzquierdaPressed(object sender, EventArgs e)
         {
-            AnimateButton(sender as Button);
+            AnimatePressButton(sender as Button);
             IniciarEnvio("left");
         }
 
         private void OnDerechaPressed(object sender, EventArgs e)
         {
-            AnimateButton(sender as Button);
+            AnimatePressButton(sender as Button);
             IniciarEnvio("right");
         }
 
@@ -80,13 +80,18 @@
         // Al soltar cualquier botón
         private void OnButtonReleased(object sender, EventArgs e)
         {
+            AnimateReleaseButton(sender as Button);
             cts?.Cancel(); // cancela el comando continuo
             _ = EnviarComando("stop"); // manda el comando stop una vez
         }
 
-        private async void AnimateButton(Button button)
+        private async void AnimatePressButton(Button button)
         {
             await button.ScaleTo(0.9, 100, Easing.CubicOut);
+        }
+
+        private async void AnimateReleaseButton(Button button)
+        {
             await button.ScaleTo(1.0, 100, Easing.CubicIn);
         }
     }
