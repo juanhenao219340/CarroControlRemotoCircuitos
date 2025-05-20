@@ -8,75 +8,90 @@ const char* htmlPage = R"rawliteral(
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Control del Carro</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f0f0f0;
-            margin-top: 50px;
-        }
-        h1 {
-            color: #333;
-        }
-        .button {
-            display: inline-block;
-            width: 140px;
-            height: 140px;
-            margin: 15px;
-            font-size: 28px;
-            font-weight: bold;
-            color: white;
-            background-color: #007BFF;
-            border: none;
-            border-radius: 20px;
-            box-shadow: 0 6px #0056b3;
-            cursor: pointer;
-            user-select: none;
-            transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
-        }
-        .button:active {
-            background-color: #0056b3;
-            box-shadow: 0 3px #003f7f;
-            transform: translateY(4px);
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-            justify-items: center;
-            max-width: 450px;
-            margin: auto;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control del Carro</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      background-color: #f2f2f2; /* Fondo claro como en la app */
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #333333;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      justify-items: center;
+      align-items: center;
+      max-width: 100%;
+      margin: auto;
+    }
+
+    .button {
+      width: 26vw;
+      height: 26vw;
+      max-width: 100px;
+      max-height: 100px;
+      font-size: 7vw;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(135deg, #007BFF, #00BFFF); /* Azul app */
+      border: none;
+      border-radius: 18px;
+      box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .button:active {
+      background: linear-gradient(135deg, #005FCC, #009ACD); /* más oscuro al presionar */
+      transform: scale(0.96);
+      box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
+    }
+
+    @media (min-width: 600px) {
+      .button {
+        width: 90px;
+        height: 90px;
+        font-size: 28px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Control del Carro</h1>
-    <div class="grid">
-        <div></div>
-        <button class="button" onclick="sendCommand('forward')">↑</button>
-        <div></div>
+  <h1>Control del Carro</h1>
+  <div class="grid">
+    <div></div>
+    <button class="button" onclick="sendCommand('forward')">↑</button>
+    <div></div>
 
-        <button class="button" onclick="sendCommand('left')">←</button>
-        <button class="button" onclick="sendCommand('stop')">■</button>
-        <button class="button" onclick="sendCommand('right')">→</button>
+    <button class="button" onclick="sendCommand('left')">←</button>
+    <button class="button" onclick="sendCommand('stop')">■</button>
+    <button class="button" onclick="sendCommand('right')">→</button>
 
-        <div></div>
-        <button class="button" onclick="sendCommand('backward')">↓</button>
-        <div></div>
-    </div>
+    <div></div>
+    <button class="button" onclick="sendCommand('backward')">↓</button>
+    <div></div>
+  </div>
 
-    <script>
-        function sendCommand(cmd) {
-            fetch('/' + cmd)
-                .then(response => console.log("Comando enviado:", cmd))
-                .catch(err => console.error("Error al enviar comando", err));
-        }
-    </script>
+  <script>
+    function sendCommand(cmd) {
+      fetch('/' + cmd)
+        .then(response => console.log("Comando enviado:", cmd))
+        .catch(err => console.error("Error al enviar comando", err));
+    }
+  </script>
 </body>
 </html>
 )rawliteral";
+
 
 // Creamos el servidor en el puerto 80
 ESP8266WebServer server(80);
