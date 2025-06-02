@@ -6,6 +6,7 @@
 
         // IP del ESP8266 en modo AP
         private const string baseUrl = "http://192.168.4.1";
+        private bool ledEncendido = false;
 
         public MainPage()
         {
@@ -21,7 +22,7 @@
                 while (!token.IsCancellationRequested)
                 {
                     string url = $"{baseUrl}/{comando}";
-                    await httpClient.GetAsync(url);
+                    var response = await httpClient.GetAsync(url);
                     await Task.Delay(100); // ajusta la frecuencia del envío si es necesario
                 }
             }
@@ -83,6 +84,42 @@
             AnimateReleaseButton(sender as Button);
             cts?.Cancel(); // cancela el comando continuo
             _ = EnviarComando("stop"); // manda el comando stop una vez
+        }
+
+        // =====================
+        // BOTÓN DE PITAR
+        // =====================
+
+        /// <summary>
+        /// Al presionar el botón de pitar, empieza a enviar "beep" continuamente.
+        /// </summary>
+        private void OnBeepPressed(object sender, EventArgs e)
+        {
+            AnimatePressButton(sender as Button);
+            cts?.Cancel();
+            cts = new CancellationTokenSource();
+            _ = EnviarComandoContinuo("beep", cts.Token);
+        }
+
+        /// <summary>
+        /// Al soltar el botón de pitar, detiene el envío y envía "nobeep".
+        /// </summary>
+        private void OnBeepReleased(object sender, EventArgs e)
+        {
+            AnimateReleaseButton(sender as Button);
+            cts?.Cancel();
+            _ = EnviarComando("nobeep");
+        }
+
+        private async void OnLedToggleClicked(object sender, EventArgs e)
+        {
+            ledEncendido = !ledEncendido;
+
+            string comando = ledEncendido ? "ledon" : "ledoff";
+            await EnviarComando(comando);
+
+            // Cambia el ícono del botón
+            LedButton.Text = ledEncendido ? "🔆" : "💡";
         }
 
         private async void AnimatePressButton(Button button)

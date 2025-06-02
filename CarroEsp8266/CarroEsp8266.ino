@@ -1,6 +1,13 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 
+const int IN1 = 13; // D7 - motor derecho +
+const int IN2 = 2;  // D4 - motor derecho -
+const int IN3 = 14; // D5 - motor izquierdo +
+const int IN4 = 12; // D6 - motor izquierdo -
+const int BUZZER_PIN = 5; // D1
+const int LED_FRONT_PIN = 16; // D0 - LED frontal
+
 // Credenciales del AP
 const char* ssid = "CarroESP8266";
 const char* password = "controlremoto";
@@ -93,7 +100,6 @@ const char* htmlPage = R"rawliteral(
 )rawliteral";
 
 
-// Creamos el servidor en el puerto 80
 ESP8266WebServer server(80);
 
 void handleRoot() {
@@ -104,31 +110,82 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Iniciando...");
 
+  pinMode(BUZZER_PIN, OUTPUT);
+  digitalWrite(BUZZER_PIN, LOW);
+
+  pinMode(LED_FRONT_PIN, OUTPUT);
+  digitalWrite(LED_FRONT_PIN, LOW); // Apagar el LED al inicio
+
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+
   // Modo AP
   WiFi.softAP(ssid, password);
 
   IPAddress IP = WiFi.softAPIP();
   Serial.print("Dirección IP del AP: ");
-  Serial.println(IP);  // Debería ser 192.168.4.1 por defecto
+  Serial.println(IP);  
 
-  // Rutas del servidor
   server.on("/", handleRoot);
-  server.on("/forward", [](){ handleCommand("adelante"); });
-  server.on("/backward", [](){ handleCommand("atrás"); });
-  server.on("/left", [](){ handleCommand("izquierda"); });
-  server.on("/right", [](){ handleCommand("derecha"); });
-  server.on("/stop", [](){ handleCommand("detener"); });
+  server.on("/forward", [](){ handleCommand("forward"); });
+  server.on("/backward", [](){ handleCommand("backward"); });
+  server.on("/left", [](){ handleCommand("left"); });
+  server.on("/right", [](){ handleCommand("right"); });
+  server.on("/stop", [](){ handleCommand("stop"); });
+  server.on("/beep", [](){ handleCommand("beep"); });
+  server.on("/nobeep", [](){ handleCommand("nobeep"); });
+  server.on("/ledon", [](){ handleCommand("ledon"); });
+  server.on("/ledoff", [](){ handleCommand("ledoff"); });
 
   server.begin();
   Serial.println("Servidor web iniciado");
 }
 
 void loop() {
-  server.handleClient();  // Escucha peticiones
+  server.handleClient();  
 }
 
 void handleCommand(String cmd) {
   Serial.print("Comando recibido: ");
   Serial.println(cmd);
+
+  if (cmd == "forward") {
+    // Invertimos lógica para que avance correctamente
+    digitalWrite(IN1, LOW); digitalWrite(IN2, HIGH); // Motor derecho adelante
+    digitalWrite(IN3, LOW); digitalWrite(IN4, HIGH); // Motor izquierdo adelante
+  } else if (cmd == "backward") {
+    digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW); // Motor derecho atrás
+    digitalWrite(IN3, HIGH); digitalWrite(IN4, LOW); // Motor izquierdo atrás
+  } else if (cmd == "left") {
+    digitalWrite(IN1, LOW); digitalWrite(IN2, HIGH); // Motor derecho adelante
+    digitalWrite(IN3, HIGH); digitalWrite(IN4, LOW); // Motor izquierdo atrás
+  } else if (cmd == "right") {
+    digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW); // Motor derecho atrás
+    digitalWrite(IN3, LOW); digitalWrite(IN4, HIGH); // Motor izquierdo adelante
+  } else if (cmd == "stop") {
+    digitalWrite(IN1, LOW); digitalWrite(IN2, LOW);
+    digitalWrite(IN3, LOW); digitalWrite(IN4, LOW);
+  }
+
+  if (cmd == "beep") {
+    digitalWrite(BUZZER_PIN, HIGH);
+
+  } else if (cmd == "nobeep") {
+    digitalWrite(BUZZER_PIN, LOW);
+  }
+
+  if (cmd == "ledon") {
+  digitalWrite(LED_FRONT_PIN, HIGH);
+} else if (cmd == "ledoff") {
+  digitalWrite(LED_FRONT_PIN, LOW);
+}
+
   server.send(200, "text/plain", "OK");
 }

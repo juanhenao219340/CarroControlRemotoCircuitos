@@ -12,65 +12,96 @@
         </LinearGradientBrush>
     </ContentPage.Background>
 
-    <Grid ColumnDefinitions="Auto,Auto"
-          RowDefinitions="Auto"
-          HorizontalOptions="Center"
-          VerticalOptions="Center"
-          Padding="40">
+    <!-- Contenedor principal -->
+    <Grid Padding="40">
 
-        <!-- Controles verticales -->
-        <VerticalStackLayout Grid.Column="0"
-                             Spacing="40"
-                             Margin="0,0,100,0"
-                             HorizontalOptions="Center"
-                             VerticalOptions="Center">
+        <!-- Botón de Pitar en la esquina superior derecha -->
+        <Button Text="🔊"
+                FontSize="24"
+                WidthRequest="80"
+                HeightRequest="60"
+                CornerRadius="20"
+                TextColor="White"
+                Style="{StaticResource GradientButtonStyle}"
+                Pressed="OnBeepPressed"
+                Released="OnBeepReleased"
+                HorizontalOptions="End"
+                VerticalOptions="Start"
+                Margin="0,0,10,0" />
 
-            <Button Text="↑"
-                    FontSize="40"
-                    WidthRequest="120"
-                    HeightRequest="120"
-                    CornerRadius="30"
-                    TextColor="White"
-                    Style="{StaticResource GradientButtonStyle}"
-                    Pressed="OnAdelantePressed"
-                    Released="OnButtonReleased" />
+        <Button x:Name="LedButton"
+            Text="💡"
+            FontSize="24"
+            WidthRequest="80"
+            HeightRequest="60"
+            CornerRadius="20"
+            TextColor="White"
+            Style="{StaticResource GradientButtonStyle}"
+            Clicked="OnLedToggleClicked"
+            HorizontalOptions="End"
+            VerticalOptions="Start"
+            Margin="0,0,100,0" />
 
-            <Button Text="↓"
-                    FontSize="40"
-                    WidthRequest="120"
-                    HeightRequest="120"
-                    CornerRadius="30"
-                    TextColor="White"
-                    Style="{StaticResource GradientButtonStyle}"
-                    Pressed="OnAtrasPressed"
-                    Released="OnButtonReleased" />
-        </VerticalStackLayout>
+        <!-- Controles de dirección centrados -->
+        <Grid ColumnDefinitions="Auto,Auto"
+              RowDefinitions="Auto"
+              HorizontalOptions="Center"
+              VerticalOptions="Center">
 
-        <!-- Controles horizontales -->
-        <HorizontalStackLayout Grid.Column="1"
-                               Spacing="40"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center">
+            <!-- Controles verticales -->
+            <VerticalStackLayout Grid.Column="0"
+                                 Spacing="40"
+                                 Margin="0,0,100,0"
+                                 HorizontalOptions="Center"
+                                 VerticalOptions="Center">
 
-            <Button Text="←"
-                    FontSize="40"
-                    WidthRequest="120"
-                    HeightRequest="120"
-                    CornerRadius="30"
-                    TextColor="White"
-                    Style="{StaticResource GradientButtonStyle}"
-                    Pressed="OnIzquierdaPressed"
-                    Released="OnButtonReleased" />
+                <Button Text="↑"
+                        FontSize="40"
+                        WidthRequest="120"
+                        HeightRequest="120"
+                        CornerRadius="30"
+                        TextColor="White"
+                        Style="{StaticResource GradientButtonStyle}"
+                        Pressed="OnAdelantePressed"
+                        Released="OnButtonReleased" />
 
-            <Button Text="→"
-                    FontSize="40"
-                    WidthRequest="120"
-                    HeightRequest="120"
-                    CornerRadius="30"
-                    TextColor="White"
-                    Style="{StaticResource GradientButtonStyle}"
-                    Pressed="OnDerechaPressed"
-                    Released="OnButtonReleased" />
-        </HorizontalStackLayout>
+                <Button Text="↓"
+                        FontSize="40"
+                        WidthRequest="120"
+                        HeightRequest="120"
+                        CornerRadius="30"
+                        TextColor="White"
+                        Style="{StaticResource GradientButtonStyle}"
+                        Pressed="OnAtrasPressed"
+                        Released="OnButtonReleased" />
+            </VerticalStackLayout>
+
+            <!-- Controles horizontales -->
+            <HorizontalStackLayout Grid.Column="1"
+                                   Spacing="40"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center">
+
+                <Button Text="←"
+                        FontSize="40"
+                        WidthRequest="120"
+                        HeightRequest="120"
+                        CornerRadius="30"
+                        TextColor="White"
+                        Style="{StaticResource GradientButtonStyle}"
+                        Pressed="OnIzquierdaPressed"
+                        Released="OnButtonReleased" />
+
+                <Button Text="→"
+                        FontSize="40"
+                        WidthRequest="120"
+                        HeightRequest="120"
+                        CornerRadius="30"
+                        TextColor="White"
+                        Style="{StaticResource GradientButtonStyle}"
+                        Pressed="OnDerechaPressed"
+                        Released="OnButtonReleased" />
+            </HorizontalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>
