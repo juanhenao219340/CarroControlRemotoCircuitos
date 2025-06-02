@@ -182,10 +182,10 @@ void handleCommand(String cmd) {
   }
 
   if (cmd == "ledon") {
-  digitalWrite(LED_FRONT_PIN, HIGH);
-} else if (cmd == "ledoff") {
-  digitalWrite(LED_FRONT_PIN, LOW);
-}
+    digitalWrite(LED_FRONT_PIN, HIGH);
+  } else if (cmd == "ledoff") {
+    digitalWrite(LED_FRONT_PIN, LOW);
+  }
 
   server.send(200, "text/plain", "OK");
 }
