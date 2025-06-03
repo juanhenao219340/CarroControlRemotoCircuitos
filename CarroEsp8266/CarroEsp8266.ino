@@ -5,12 +5,14 @@ const int IN1 = 13; // D7 - motor derecho +
 const int IN2 = 2;  // D4 - motor derecho -
 const int IN3 = 14; // D5 - motor izquierdo +
 const int IN4 = 12; // D6 - motor izquierdo -
+
 const int BUZZER_PIN = 5; // D1
 const int LED_FRONT_PIN = 16; // D0 - LED frontal
 
 // Credenciales del AP
 const char* ssid = "CarroESP8266";
 const char* password = "controlremoto";
+
 const char* htmlPage = R"rawliteral(
 <!DOCTYPE html>
 <html>
@@ -131,7 +133,7 @@ void setup() {
 
   IPAddress IP = WiFi.softAPIP();
   Serial.print("Dirección IP del AP: ");
-  Serial.println(IP);  
+  Serial.println(IP);  // IP esperada: 192.168.4.1
 
   server.on("/", handleRoot);
   server.on("/forward", [](){ handleCommand("forward"); });
